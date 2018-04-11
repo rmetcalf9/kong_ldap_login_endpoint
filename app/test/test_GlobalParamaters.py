@@ -12,10 +12,11 @@ class testHelperSuperClass(testHelperSuperClass):
     }
     with self.assertRaises(Exception) as context:
       gp = GlobalParamatersClass(env)
-    self.checkGotRightException(context,getInvalidEnvVarPAramaterException('LOGINEP_LDAP_TIMEOUT'))
+    self.checkGotRightException(context,getInvalidEnvVarPAramaterException('LOGINEP_VERSION'))
 
   def test_goodParams(self):
     env = {
+      'LOGINEP_VERSION': 'TestRun',
       'LOGINEP_LDAP_TIMEOUT': '60',
       'LOGINEP_LDAP_HOST': 'unixldap.somehost.com',
       'LOGINEP_LDAP_PORT': '123',
@@ -30,6 +31,7 @@ class testHelperSuperClass(testHelperSuperClass):
 
   def test_emptyParamsNotExcepted(self):
     env = {
+      'LOGINEP_VERSION': 'TestRun',
       'LOGINEP_LDAP_TIMEOUT': '60',
       'LOGINEP_LDAP_HOST': 'unixldap.somehost.com',
       'LOGINEP_LDAP_PORT': '123',
