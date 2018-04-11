@@ -2,11 +2,13 @@ import signal
 from flask import Flask, Blueprint
 from GlobalParamaters import GlobalParamatersClass
 
+from loginAPI import registerAPI as registerLoginApi
+
 class appObj():
   flaskAppObject = None
   globalParamObject = None
   isInitOnce = False
-  def init(self, envirom):
+  def init(self, envirom, testingMode = False):
     self.globalParamObject = GlobalParamatersClass(envirom)
     if (self.isInitOnce):
       return
@@ -15,6 +17,7 @@ class appObj():
 
   def initOnce(self):
     self.flaskAppObject = Flask(__name__)
+    registerLoginApi(self)
     signal.signal(signal.SIGINT, self.exit_gracefully)
     signal.signal(signal.SIGTERM, self.exit_gracefully) #sigterm is sent by docker stop command
 
