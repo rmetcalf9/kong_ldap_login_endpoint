@@ -5,7 +5,7 @@ login_api_blueprint = Blueprint('login_api_blueprint',__name__)
 
 @login_api_blueprint.route('/', methods=['GET'])
 def login():
-  raise Unauthorized('Not Implemented')
+  raise BadRequest('Not Implemented')
 
 def registerAPI(appObj):
   appObj.flaskAppObject.register_blueprint(login_api_blueprint, url_prefix='/login')
