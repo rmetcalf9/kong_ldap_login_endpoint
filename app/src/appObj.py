@@ -1,6 +1,7 @@
 import signal
 from flask import Flask, Blueprint
 from GlobalParamaters import GlobalParamatersClass
+from ldap import ldapClass
 
 from loginAPI import registerAPI as registerLoginApi
 
@@ -8,8 +9,10 @@ class appObj():
   flaskAppObject = None
   globalParamObject = None
   isInitOnce = False
+  ldap = None
   def init(self, envirom, testingMode = False):
     self.globalParamObject = GlobalParamatersClass(envirom)
+    self.ldap = ldapClass()
     if (self.isInitOnce):
       return
     self.isInitOnce = True
