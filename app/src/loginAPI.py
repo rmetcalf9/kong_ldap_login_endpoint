@@ -31,7 +31,7 @@ def registerAPI(appObj):
     username = arr[0]
     password = arr[1]
 
-    if not appObj.ldap.verifyCredentials(username,password):
+    if not appObj.ldapObj.verifyCredentials(username,password):
       raise Unauthorized('Invald Credentials')
     
     #raise BadRequest('Not Implemented')

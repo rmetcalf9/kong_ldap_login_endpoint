@@ -55,3 +55,17 @@ use ldaps:// URL then I don't need to call start_tls
 
 
 TODO Check if Kong deletes old JWT credentials that have expired/failed validation - https://discuss.konghq.com/t/are-jwt-credentials-deleted/821
+
+
+## Future Docker build notes
+
+To get python-ldap working on ubuntu
+````
+sudo apt-get install libldap2-dev libssl-dev libsasl2-dev
+````
+
+docker apline
+???apython3-dev
+````
+apk add build-base openldap-dev
+````
