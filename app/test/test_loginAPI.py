@@ -32,7 +32,13 @@ class test_loginAPI(testHelperAPIClient):
     self.assertEqual(result.status_code, 400)
 
   def test_loginBadCredentials(self):
+    username = 'TestBadUser'
+    password = 'TestBadPassword'
+    result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
+    self.assertEqual(result.status_code, 401)
+
+  def test_loginGiid(self):
     username = 'TestUser'
     password = 'TestPassword'
     result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
-    self.assertEqual(result.status_code, 401)
+    self.assertEqual(result.status_code, 500)
