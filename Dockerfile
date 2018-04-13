@@ -45,6 +45,6 @@ CMD ["/run_app_docker.sh"]
 #  and when it first starts it won't check the health until the interval so I can't have
 #  a higher value without increasing the startup time
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://127.0.0.1:80/frontend/index.html || exit 1
+  CMD curl -f http://127.0.0.1:80/login/healthy || exit 1
 
 ##docker run --name loginc -p 80:80 -d metcarob/kong_ldap_login_endpoint:latest
