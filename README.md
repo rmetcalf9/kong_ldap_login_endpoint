@@ -67,5 +67,5 @@ sudo apt-get install libldap2-dev libssl-dev libsasl2-dev
 docker apline
 ???apython3-dev
 ````
-apk add build-base openldap-dev
+apk add build-base openldap-dev python3-dev
 ````
