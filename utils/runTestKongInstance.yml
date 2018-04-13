@@ -1,5 +1,5 @@
 #docker compose file which will run a kong instance (and konga) to test against
-# execute "docker stack deploy --compose-file=runTestKongInstance.yml dockjob-https"
+# execute "docker stack deploy --compose-file=runTestKongInstance.yml kongtest"
 # kong normal endpoints are on ports 80 and 443
 # kong Admin API runs on port 81
 # Konga Admin instance runs on port 1337
