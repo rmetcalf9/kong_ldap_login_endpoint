@@ -32,12 +32,15 @@ TODO
 
 Paramaters are read as enviroment variables
 
-LOGINEP_LDAP_TIMEOUT ??
+LOGINEP_LDAP_TIMEOUT - Seconds to wait for LDAP connection timeout
 LOGINEP_LDAP_HOST
 LOGINEP_LDAP_PORT
 LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX    - ldap_
 LOGINEP_USER_BASE_DN
 LOGINEP_USER_ATTRIBUTE
+LOGINEP_GROUP_BASE_DN=ou=Group,ou=everyone,dc=somehost,dc=com
+LOGINEP_GROUP_ATTRIBUTE=cn
+LOGINEP_GROUP_MEMBER_FIELD=memberUid
 LOGINEP_KONG_ADMINAPI_URL  - http://kong:8001
 LOGINEP_SYNCACL               - gorup1,group2,group3
 LOGINEP_JWT_TOKEN_TIMEOUT   - seconds login is valid for
@@ -46,26 +49,11 @@ LOGINEP_JWT_TOKEN_TIMEOUT   - seconds login is valid for
 
 This container is designed to be deployed as a docker container.
 
-## Notes
 
-python-ldap:
-https://helpful.knobs-dials.com/index.php/Python-ldap_notes
-ldap.set_option(ldap.OPT_NETWORK_TIMEOUT, seconds) 
-use ldaps:// URL then I don't need to call start_tls
-
-
-TODO Check if Kong deletes old JWT credentials that have expired/failed validation - https://discuss.konghq.com/t/are-jwt-credentials-deleted/821
-
-
-## Future Docker build notes
+## Ubuntu development enviroment setup notes
 
 To get python-ldap working on ubuntu
 ````
 sudo apt-get install libldap2-dev libssl-dev libsasl2-dev
 ````
 
-docker apline
-???apython3-dev
-````
-apk add build-base openldap-dev python3-dev
-````

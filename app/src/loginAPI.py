@@ -10,6 +10,10 @@ login_api_blueprint = Blueprint('login_api_blueprint',__name__)
 
 
 def registerAPI(appObj):
+  @login_api_blueprint.route('/healthy', methods=['GET'])
+  def healthy():
+    return Response(None, status=200, mimetype='application/json')
+
   @login_api_blueprint.route('/', methods=['GET'])
   def login():
     authHeader = request.headers.get('Authorization')
