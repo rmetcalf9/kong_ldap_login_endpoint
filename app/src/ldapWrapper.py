@@ -10,7 +10,11 @@ class ldapClass():
     ldapStr = self.appObj.globalParamObject.LOGINEP_GROUP_ATTRIBUTE + "=" + curGroup + "," + self.appObj.globalParamObject.LOGINEP_GROUP_BASE_DN
     ldap_result_id = ldap_connection.search(ldapStr, ldap.SCOPE_SUBTREE, None, [self.appObj.globalParamObject.LOGINEP_GROUP_MEMBER_FIELD])
     result_set = []
+    numRes = 0
     while 1:
+      numRes = numRes + 1
+      if numRes > 9999:
+        raise Exception('LDAP query returned to many results')
       try:
         result_type, result_data = ldap_connection.result(ldap_result_id, 0)
       except ldap.NO_SUCH_OBJECT:
@@ -50,6 +54,7 @@ class ldapClass():
 
     ldap_connection = ldap.initialize("ldaps://" + self.appObj.globalParamObject.LOGINEP_LDAP_HOST + ":" + self.appObj.globalParamObject.LOGINEP_LDAP_PORT)
     ldap_connection.protocol_version = ldap.VERSION3
+    ldap.OPT_NETWORK_TIMEOUT = self.appObj.globalParamObject.LOGINEP_LDAP_TIMEOUT
     try:
       ldap_connection.simple_bind_s(self.appObj.globalParamObject.LOGINEP_USER_ATTRIBUTE + "=" + username + "," + self.appObj.globalParamObject.LOGINEP_USER_BASE_DN, password)
     except ldap.INVALID_CREDENTIALS:

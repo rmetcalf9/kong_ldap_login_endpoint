@@ -35,6 +35,9 @@ def registerAPI(appObj):
     if not ldapResult['Authed']:
       raise Unauthorized('Invald Credentials')
     
+    # appObj.kongObj.ensureUserExistsWithACL(username, ldapResult['Groups'])
+    # appObj.kongObj.getJWTToken(username)
+    
     print(ldapResult['Groups'])
     
     #raise BadRequest('Not Implemented')
