@@ -20,6 +20,9 @@ export LOGINEP_LDAP_PORT=123
 export LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX=ldap_
 export LOGINEP_USER_BASE_DN=ou=People,ou=everyone,dc=somehost,dc=com
 export LOGINEP_USER_ATTRIBUTE=uid
+export LOGINEP_GROUP_BASE_DN=ou=Group,ou=everyone,dc=somehost,dc=com
+export LOGINEP_GROUP_ATTRIBUTE=cn
+export LOGINEP_GROUP_MEMBER_FIELD=memberUid
 export LOGINEP_KONG_ADMINAPI_URL=http://kong:8001
 export LOGINEP_SYNCACL=group1,group2,group3
 export LOGINEP_JWT_TOKEN_TIMEOUT=60

@@ -23,6 +23,9 @@ class testHelperSuperClass(testHelperSuperClass):
       'LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX': 'ldap_',
       'LOGINEP_USER_BASE_DN': 'ou=People,ou=everyone,dc=somehost,dc=com',
       'LOGINEP_USER_ATTRIBUTE': 'uid',
+      'LOGINEP_GROUP_BASE_DN': 'ou=Group,ou=everyone,dc=somehost,dc=com',
+      'LOGINEP_GROUP_ATTRIBUTE': 'cn',
+      'LOGINEP_GROUP_MEMBER_FIELD': 'memberUid',
       'LOGINEP_KONG_ADMINAPI_URL': 'http://kong:8001',
       'LOGINEP_SYNCACL': 'group1,group2,group3',
       'LOGINEP_JWT_TOKEN_TIMEOUT': '60'
@@ -38,6 +41,9 @@ class testHelperSuperClass(testHelperSuperClass):
       'LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX': 'ldap_',
       'LOGINEP_USER_BASE_DN': 'ou=People,ou=everyone,dc=somehost,dc=com',
       'LOGINEP_USER_ATTRIBUTE': '',
+      'LOGINEP_GROUP_BASE_DN': 'ou=Group,ou=everyone,dc=somehost,dc=com',
+      'LOGINEP_GROUP_ATTRIBUTE': 'cn',
+      'LOGINEP_GROUP_MEMBER_FIELD': 'memberUid',
       'LOGINEP_KONG_ADMINAPI_URL': 'http://kong:8001',
       'LOGINEP_SYNCACL': 'group1,group2,group3',
       'LOGINEP_JWT_TOKEN_TIMEOUT': '60'

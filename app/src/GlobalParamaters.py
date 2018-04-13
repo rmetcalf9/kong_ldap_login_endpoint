@@ -19,6 +19,9 @@ class GlobalParamatersClass():
   LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX = None
   LOGINEP_USER_BASE_DN = None
   LOGINEP_USER_ATTRIBUTE = None
+  LOGINEP_GROUP_BASE_DN = None
+  LOGINEP_GROUP_ATTRIBUTE = None
+  LOGINEP_GROUP_MEMBER_FIELD = None
   LOGINEP_KONG_ADMINAPI_URL = None
   LOGINEP_SYNCACL = None
   LOGINEP_JWT_TOKEN_TIMEOUT = None
@@ -47,6 +50,9 @@ class GlobalParamatersClass():
     self.LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX = self.readFromEnviroment(env, 'LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX', None, None)
     self.LOGINEP_USER_BASE_DN = self.readFromEnviroment(env, 'LOGINEP_USER_BASE_DN', None, None)
     self.LOGINEP_USER_ATTRIBUTE = self.readFromEnviroment(env, 'LOGINEP_USER_ATTRIBUTE', None, None)
+    self.LOGINEP_GROUP_BASE_DN = self.readFromEnviroment(env, 'LOGINEP_GROUP_BASE_DN', None, None)
+    self.LOGINEP_GROUP_ATTRIBUTE = self.readFromEnviroment(env, 'LOGINEP_GROUP_ATTRIBUTE', None, None)
+    self.LOGINEP_GROUP_MEMBER_FIELD = self.readFromEnviroment(env, 'LOGINEP_GROUP_MEMBER_FIELD', None, None)
     self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None)
     self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None)
     self.LOGINEP_JWT_TOKEN_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_JWT_TOKEN_TIMEOUT', None, None)
@@ -59,6 +65,9 @@ class GlobalParamatersClass():
     r += 'LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX:' + self.LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX + '\n'
     r += 'LOGINEP_USER_BASE_DN:' + self.LOGINEP_USER_BASE_DN + '\n'
     r += 'LOGINEP_USER_ATTRIBUTE:' + self.LOGINEP_USER_ATTRIBUTE + '\n'
+    r += 'LOGINEP_GROUP_BASE_DN:' + self.LOGINEP_GROUP_BASE_DN + '\n'
+    r += 'LOGINEP_GROUP_ATTRIBUTE:' + self.LOGINEP_GROUP_ATTRIBUTE + '\n'
+    r += 'LOGINEP_GROUP_MEMBER_FIELD:' + self.LOGINEP_GROUP_MEMBER_FIELD + '\n'
     r += 'LOGINEP_KONG_ADMINAPI_URL:' + self.LOGINEP_KONG_ADMINAPI_URL + '\n'
     r += 'LOGINEP_SYNCACL:' + self.LOGINEP_SYNCACL + '\n'
     r += 'LOGINEP_JWT_TOKEN_TIMEOUT:' + self.LOGINEP_JWT_TOKEN_TIMEOUT + '\n'
