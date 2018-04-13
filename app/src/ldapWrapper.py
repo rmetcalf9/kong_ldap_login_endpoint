@@ -31,7 +31,6 @@ class ldapClass():
     tuple = literal_eval(str(result_set[0][0]))
     if len(tuple) != 2:
       raise Exception('Did not understand group query result ' + result_set[0][0])
-    print(tuple[1][self.appObj.globalParamObject.LOGINEP_GROUP_MEMBER_FIELD])
     for curMember in tuple[1][self.appObj.globalParamObject.LOGINEP_GROUP_MEMBER_FIELD]:
       if curMember.decode("utf-8")==username:
         return True

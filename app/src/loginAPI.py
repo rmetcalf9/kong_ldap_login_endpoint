@@ -34,9 +34,10 @@ def registerAPI(appObj):
     ldapResult = appObj.ldapObj.verifyCredentials(username,password)
     if not ldapResult['Authed']:
       raise Unauthorized('Invald Credentials')
-    
-    # appObj.kongObj.ensureUserExistsWithACL(username, ldapResult['Groups'])
-    # appObj.kongObj.getJWTToken(username)
+
+    kongusername = appObj.globalParamObject.LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX + username
+    appObj.kongObj.ensureUserExistsWithACL(kongusername, ldapResult['Groups'])
+    # appObj.kongObj.getJWTToken(kongusername)
     
     print(ldapResult['Groups'])
     

@@ -2,6 +2,7 @@ import signal
 from flask import Flask, Blueprint
 from GlobalParamaters import GlobalParamatersClass
 from ldapWrapper import ldapClass
+from kongAdminAPIWrapper import kongAdminAPIWrapperClass
 
 from loginAPI import registerAPI as registerLoginApi
 
@@ -10,9 +11,11 @@ class appObj():
   globalParamObject = None
   isInitOnce = False
   ldapObj = None
+  kongObj = None
   def init(self, envirom, testingMode = False):
     self.globalParamObject = GlobalParamatersClass(envirom)
     self.ldapObj = ldapClass(self)
+    self.kongObj = kongAdminAPIWrapperClass(self)
     if (self.isInitOnce):
       return
     self.isInitOnce = True
