@@ -1,5 +1,5 @@
 import ldap
-
+from ast import literal_eval
 
 class ldapClass():
   appObj = None
@@ -8,7 +8,6 @@ class ldapClass():
 
   def isUserInGroup(self,username,curGroup,ldap_connection):
     ldapStr = self.appObj.globalParamObject.LOGINEP_GROUP_ATTRIBUTE + "=" + curGroup + "," + self.appObj.globalParamObject.LOGINEP_GROUP_BASE_DN
-    print(ldapStr)
     ldap_result_id = ldap_connection.search(ldapStr, ldap.SCOPE_SUBTREE, None, [self.appObj.globalParamObject.LOGINEP_GROUP_MEMBER_FIELD])
     result_set = []
     while 1:
@@ -21,10 +20,20 @@ class ldapClass():
       else:
         if result_type == ldap.RES_SEARCH_ENTRY:
           result_set.append(result_data)
-    print(result_set)
+    if len(result_set) != 1:
+      raise Exception('LDAP query returned result set size of ' + len(result_set) + ' expected 1')
 
-    #TODO Determine if this user is a member of this group
-    return True
+    #Verify Group Membership
+    tuple = literal_eval(str(result_set[0][0]))
+    if len(tuple) != 2:
+      raise Exception('Did not understand group query result ' + result_set[0][0])
+    print(tuple[1][self.appObj.globalParamObject.LOGINEP_GROUP_MEMBER_FIELD])
+    for curMember in tuple[1][self.appObj.globalParamObject.LOGINEP_GROUP_MEMBER_FIELD]:
+      if curMember.decode("utf-8")==username:
+        return True
+
+    #did not find them in the group
+    return False
 
   falseReturn = { 'Authed': False, 'Groups': []}
   def verifyCredentials(self,username,password):
