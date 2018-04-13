@@ -1,7 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response
 from werkzeug.exceptions import Unauthorized, BadRequest
 import re
-from base64 import b64decode
+from base64 import b64decode, urlsafe_b64decode
+import jwt
+import datetime
+import json
 
 login_api_blueprint = Blueprint('login_api_blueprint',__name__)
 
@@ -37,11 +40,14 @@ def registerAPI(appObj):
 
     kongusername = appObj.globalParamObject.LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX + username
     appObj.kongObj.ensureUserExistsWithACL(kongusername, ldapResult['Groups'])
-    # appObj.kongObj.getJWTToken(kongusername)
-    
-    print(ldapResult['Groups'])
-    
-    #raise BadRequest('Not Implemented')
-    raise Exception('TODO')
+    jwtToken = appObj.kongObj.getJWTToken(kongusername)
+
+    encodedJWT = jwt.encode({
+      'iss': jwtToken['key'],
+      'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=int(appObj.globalParamObject.LOGINEP_JWT_TOKEN_TIMEOUT)),
+      'username': username,
+      'groups': ldapResult['Groups']
+    }, b64decode(jwtToken['secret']), algorithm='HS256')
+    return Response(json.dumps({'JWTToken': encodedJWT.decode('utf-8') }), status=200, mimetype='application/json')
 
   appObj.flaskAppObject.register_blueprint(login_api_blueprint, url_prefix='/login')
