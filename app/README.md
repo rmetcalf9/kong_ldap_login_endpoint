@@ -15,3 +15,4 @@ Run run_app_developer_private.sh
 
 You should be able to call the instance on 127.0.0.1:80/login
 and access the konga instance on 127.0.0.1:1337/#!/dashboard
+you can call a test hello world service on 127.0.0.1:79/helloworldservice
