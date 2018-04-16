@@ -55,6 +55,7 @@ This container is designed to be deployed as a docker container.
 
  - Check all issues in the next milestone are closed
  - Run the [build process](./dockerImageBuildProcess/README.md) to create an image on my local machine
+ - Run the container and make sure it comes up healthy (docker run metcarob/kong_ldap_login_endpoint:VERSION)
  - Run docker login and log in to my docker hub account
  - Run docker push metcarob/kong_ldap_login_endpoint:VERSION (Replace VERSION with version number that was just built)
  - Run docker push metcarob/kong_ldap_login_endpoint:latest
