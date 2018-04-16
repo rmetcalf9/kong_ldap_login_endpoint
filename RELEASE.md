@@ -2,4 +2,4 @@
 
 ## 0.0.8 - Initial version
 
-See [milestone](milestone/1)
+See [milestone](../../milestone/1)
