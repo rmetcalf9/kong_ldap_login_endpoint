@@ -20,6 +20,7 @@ parser.add_argument('serviceEP', help='Service Endpoint')
 args = parser.parse_args()
 
 continous = False
+stopOnException = True
 
 ldapUsername = input("Please enter your LDAP username: ")
 ldapPassword = getpass.getpass(prompt="Please enter your password: ")
@@ -28,6 +29,12 @@ if len(continousSTR)>0:
   continousSTR = continousSTR[0].upper()
   if continousSTR == 'Y':
     continous = True
+if continous:
+  stopOnExceptionSTR = input("Halt on Exception? (Y): ")
+  if len(stopOnExceptionSTR)>0:
+    stopOnExceptionSTR = stopOnExceptionSTR[0].upper()
+    if stopOnExceptionSTR == 'N':
+      stopOnException = False
 
 serv = kongLdapJWTSecuredServiceClass(args.loginEP, ldapUsername, ldapPassword)
 
@@ -42,7 +49,8 @@ while running:
   if not serviceReturnOK(serviceResult):
     print("\nEXCEPTION!!!\n")
     print(serviceResult.text)
-    raise Exception("Service call Failed with status " + str(serviceResult.status_code))
+    if stopOnException:
+      raise Exception("Service call Failed with status " + str(serviceResult.status_code))
 
   print('sucessful:', end='')
   print(serviceResult.text, end='')
