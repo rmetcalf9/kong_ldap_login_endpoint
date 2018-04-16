@@ -4,6 +4,7 @@ import re
 from base64 import b64decode, urlsafe_b64decode
 import jwt
 import datetime
+import pytz
 import json
 
 login_api_blueprint = Blueprint('login_api_blueprint',__name__)
@@ -46,12 +47,13 @@ def registerAPI(appObj):
     appObj.kongObj.ensureUserExistsWithACL(kongusername, ldapResult['Groups'])
     jwtToken = appObj.kongObj.getJWTToken(kongusername)
 
+    expiryTime = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=int(appObj.globalParamObject.LOGINEP_JWT_TOKEN_TIMEOUT))
     encodedJWT = jwt.encode({
       'iss': jwtToken['key'],
-      'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=int(appObj.globalParamObject.LOGINEP_JWT_TOKEN_TIMEOUT)),
+      'exp': expiryTime,
       'username': username,
       'groups': ldapResult['Groups']
     }, b64decode(jwtToken['secret']), algorithm='HS256')
-    return Response(json.dumps({'JWTToken': encodedJWT.decode('utf-8') }), status=200, mimetype='application/json')
+    return Response(json.dumps({'JWTToken': encodedJWT.decode('utf-8'), 'TokenExpiry': expiryTime.isoformat() }), status=200, mimetype='application/json')
 
   appObj.flaskAppObject.register_blueprint(login_api_blueprint, url_prefix='/login')
