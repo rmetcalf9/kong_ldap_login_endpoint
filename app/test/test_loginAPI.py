@@ -1,8 +1,10 @@
-from TestHelperSuperClass import testHelperAPIClient
+from TestHelperSuperClass import testHelperAPIClient, envWithNoGroups
 from base64 import b64encode
 from unittest.mock import patch
 import ldap
 import json
+from appObj import appObj
+
 
 from requests._internal_utils import to_native_string
 def _basic_auth_str(prefix, username, password):
@@ -73,6 +75,25 @@ class test_loginAPI(testHelperAPIClient):
     okrequestresp(text='{"id": "123"}') #try and insert group3
   ])
   def test_loginGoodConsumerPresent(self, x1, x2, mockResult, mockRequestsGet, mockRequestsPut):
+    username = 'TestUser'
+    password = 'TestPassword'
+    result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
+    self.assertEqual(result.status_code, 200)
+    resultJSON = json.loads(result.get_data(as_text=True))
+    print(resultJSON['JWTToken'])
+    self.assertNotEqual(resultJSON['JWTToken'],'')
+
+  @patch('ldap.ldapobject.SimpleLDAPObject.simple_bind_s', return_value=None)
+  @patch('requests.get', side_effect=[
+    okrequestresp(text='{"id": "123"}'), #get consumer
+    okrequestresp(text='{"data": []}'),  #get consumer acl list
+    okrequestresp(text='{"key": "some_key", "secret": "some_secretxx"}')   #get consumer jwt token
+  ])
+  def test_loginGoodConsumerNoGroupsPresent(self, mockLdapSimpleBind, mockKongGet):
+    appObj.init(envWithNoGroups, testingMode = True)
+    self.testClient = appObj.flaskAppObject.test_client()
+    self.testClient.testing = True 
+
     username = 'TestUser'
     password = 'TestPassword'
     result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})

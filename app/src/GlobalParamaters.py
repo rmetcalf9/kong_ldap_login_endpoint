@@ -1,7 +1,7 @@
 
 
 exceptions = dict()
-def getInvalidEnvVarPAramaterException(envVarName):
+def getInvalidEnvVarParamaterException(envVarName):
   if envVarName not in exceptions:
     exceptions[envVarName] = InvalidEnvVarParamaterExecption(envVarName)
   return exceptions[envVarName]
@@ -28,18 +28,19 @@ class GlobalParamatersClass():
 
 
   #Read environment variable or raise an exception if it is missing and there is no default
-  def readFromEnviroment(self, env, envVarName, defaultValue, acceptableValues):
+  def readFromEnviroment(self, env, envVarName, defaultValue, acceptableValues, nullValueAllowed=False):
     try:
       val = env[envVarName]
       if (acceptableValues != None):
         if (val not in acceptableValues):
-          raise getInvalidEnvVarPAramaterException(envVarName)
-      if val == '':
-        raise getInvalidEnvVarPAramaterException(envVarName)
+          raise getInvalidEnvVarParamaterException(envVarName)
+      if not nullValueAllowed:
+        if val == '':
+          raise getInvalidEnvVarParamaterException(envVarName)
       return val
     except KeyError:
       if (defaultValue == None):
-        raise getInvalidEnvVarPAramaterException(envVarName)
+        raise getInvalidEnvVarParamaterException(envVarName)
       return defaultValue
 
   def __init__(self, env):
@@ -54,7 +55,7 @@ class GlobalParamatersClass():
     self.LOGINEP_GROUP_ATTRIBUTE = self.readFromEnviroment(env, 'LOGINEP_GROUP_ATTRIBUTE', None, None)
     self.LOGINEP_GROUP_MEMBER_FIELD = self.readFromEnviroment(env, 'LOGINEP_GROUP_MEMBER_FIELD', None, None)
     self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None)
-    self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None)
+    self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None, nullValueAllowed=True)
     self.LOGINEP_JWT_TOKEN_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_JWT_TOKEN_TIMEOUT', None, None)
 
   def getStartupOutput(self):

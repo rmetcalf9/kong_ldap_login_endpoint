@@ -1,5 +1,5 @@
 from TestHelperSuperClass import testHelperSuperClass
-from GlobalParamaters import GlobalParamatersClass, getInvalidEnvVarPAramaterException
+from GlobalParamaters import GlobalParamatersClass, getInvalidEnvVarParamaterException
 
 class testHelperSuperClass(testHelperSuperClass):
   def test_badParams(self):
@@ -12,7 +12,7 @@ class testHelperSuperClass(testHelperSuperClass):
     }
     with self.assertRaises(Exception) as context:
       gp = GlobalParamatersClass(env)
-    self.checkGotRightException(context,getInvalidEnvVarPAramaterException('LOGINEP_VERSION'))
+    self.checkGotRightException(context,getInvalidEnvVarParamaterException('LOGINEP_VERSION'))
 
   def test_goodParams(self):
     env = {
@@ -50,4 +50,4 @@ class testHelperSuperClass(testHelperSuperClass):
     }
     with self.assertRaises(Exception) as context:
       gp = GlobalParamatersClass(env)
-    self.checkGotRightException(context,getInvalidEnvVarPAramaterException('LOGINEP_USER_ATTRIBUTE'))
+    self.checkGotRightException(context,getInvalidEnvVarParamaterException('LOGINEP_USER_ATTRIBUTE'))

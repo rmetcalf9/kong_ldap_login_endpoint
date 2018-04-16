@@ -49,6 +49,15 @@ LOGINEP_JWT_TOKEN_TIMEOUT   - seconds login is valid for
 
 This container is designed to be deployed as a docker container.
 
+## My Release Proces
+
+ - Check all issues in the next milestone are closed
+ - Run the [build process](./dockerImageBuildProcess/README.md) to create an image on my local machine
+ - Rename next milestone to release number
+ - Update RELEASE.md (pointing at the milestone)
+ - Run docker login and log in to my docker hub account
+ - Run docker push metcarob/dockjob:VERSION (Replace VERSION with version number that was just built)
+ - Run docker push metcarob/dockjob:latest
 
 ## Ubuntu development enviroment setup notes
 

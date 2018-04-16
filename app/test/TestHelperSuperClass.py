@@ -16,6 +16,8 @@ env = {
   'LOGINEP_SYNCACL': 'group1,group2,group3',
   'LOGINEP_JWT_TOKEN_TIMEOUT': '60'
 }
+envWithNoGroups = dict(env)
+envWithNoGroups['LOGINEP_SYNCACL'] = ''
 
 class testHelperSuperClass(unittest.TestCase):
   def checkGotRightException(self, context, ExpectedException):
