@@ -24,8 +24,8 @@ TODO
  - For each configured LOGINEP_SYNCACL query LDAP and verify if the user is a member of that group in LDAP
  - Remove all ACL's the consumer shouldn't have
  - Add all ACL's the consumer should have
- - Generate a JWT token with exp set based on LOGINEP_JWT_TOKEN_TIMEOUT
  - Add JWT credential to consumer
+ - Generate a JWT token with exp set based on LOGINEP_JWT_TOKEN_TIMEOUT
  - Reply to caller passing back their JWT token
  
 ## Paramaters
