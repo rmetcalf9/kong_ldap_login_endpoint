@@ -3,6 +3,8 @@
 This flask python application creates a login endpoint that authenticates a user with an LDAP server, adds a consumer for the user to a Kong API gateway giving the caller a JWT token.
 It can also add/remove Kong ACL's for that consumer depending if the user is a member of the group.
 
+[Deployed in docker hub](https://hub.docker.com/r/metcarob/kong_ldap_login_endpoint/)
+
 ## Why not just use the Kong LDAP plugin?
 
 The Kong LDAP plugin will not work with Kong ACL's [See kong issue](https://github.com/Kong/kong/issues/1439).
@@ -56,8 +58,8 @@ This container is designed to be deployed as a docker container.
  - Rename next milestone to release number
  - Update RELEASE.md (pointing at the milestone)
  - Run docker login and log in to my docker hub account
- - Run docker push metcarob/dockjob:VERSION (Replace VERSION with version number that was just built)
- - Run docker push metcarob/dockjob:latest
+ - Run docker push metcarob/kong_ldap_login_endpoint:VERSION (Replace VERSION with version number that was just built)
+ - Run docker push metcarob/kong_ldap_login_endpoint:latest
 
 ## Ubuntu development enviroment setup notes
 
