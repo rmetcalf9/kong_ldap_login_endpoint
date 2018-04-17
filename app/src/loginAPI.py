@@ -1,11 +1,13 @@
 from flask import Blueprint, request, Response
 from werkzeug.exceptions import Unauthorized, BadRequest
 import re
-from base64 import b64decode, urlsafe_b64decode
+from base64 import b64decode, urlsafe_b64decode, b64encode
 import jwt
 import datetime
 import pytz
 import json
+import random
+import string
 
 login_api_blueprint = Blueprint('login_api_blueprint',__name__)
 
@@ -43,9 +45,15 @@ def registerAPI(appObj):
     if not ldapResult['Authed']:
       raise Unauthorized('Invald Credentials')
 
-    kongusername = appObj.globalParamObject.LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX + username
-    appObj.kongObj.ensureUserExistsWithACL(kongusername, ldapResult['Groups'])
-    jwtToken = appObj.kongObj.getJWTToken(kongusername)
+    jwtToken = dict()
+    if appObj.globalParamObject.LOGINEP_KONG_ADMINAPI_URL == '':
+      jwtToken['key'] = 'KongNotConfigured'
+      random_secret_str = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
+      jwtToken['secret'] = b64encode(random_secret_str.encode("utf-8"))
+    else:
+      kongusername = appObj.globalParamObject.LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX + username
+      appObj.kongObj.ensureUserExistsWithACL(kongusername, ldapResult['Groups'])
+      jwtToken = appObj.kongObj.getJWTToken(kongusername)
 
     expiryTime = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=int(appObj.globalParamObject.LOGINEP_JWT_TOKEN_TIMEOUT))
     encodedJWT = jwt.encode({

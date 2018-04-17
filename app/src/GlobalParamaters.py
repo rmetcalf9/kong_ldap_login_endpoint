@@ -57,7 +57,7 @@ class GlobalParamatersClass():
     self.LOGINEP_GROUP_BASE_DN = self.readFromEnviroment(env, 'LOGINEP_GROUP_BASE_DN', None, None)
     self.LOGINEP_GROUP_ATTRIBUTE = self.readFromEnviroment(env, 'LOGINEP_GROUP_ATTRIBUTE', None, None)
     self.LOGINEP_GROUP_MEMBER_FIELD = self.readFromEnviroment(env, 'LOGINEP_GROUP_MEMBER_FIELD', None, None)
-    self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None)
+    self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None, nullValueAllowed=True)
     self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None, nullValueAllowed=True)
     self.LOGINEP_JWT_TOKEN_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_JWT_TOKEN_TIMEOUT', None, None)
     LOGINEP_PORTSTR = self.readFromEnviroment(env, 'LOGINEP_PORT', '80', None)
