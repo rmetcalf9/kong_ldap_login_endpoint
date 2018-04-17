@@ -25,6 +25,7 @@ class GlobalParamatersClass():
   LOGINEP_KONG_ADMINAPI_URL = None
   LOGINEP_SYNCACL = None
   LOGINEP_JWT_TOKEN_TIMEOUT = None
+  LOGINEP_PORT = None
 
 
   #Read environment variable or raise an exception if it is missing and there is no default
@@ -57,6 +58,11 @@ class GlobalParamatersClass():
     self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None)
     self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None, nullValueAllowed=True)
     self.LOGINEP_JWT_TOKEN_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_JWT_TOKEN_TIMEOUT', None, None)
+    LOGINEP_PORTSTR = self.readFromEnviroment(env, 'LOGINEP_PORT', '80', None)
+    try:
+      self.LOGINEP_PORT = int(LOGINEP_PORTSTR)
+    except:
+      raise Exception('LOGINEP_PORT must be an integer')
 
   def getStartupOutput(self):
     r = 'Starting kong_ldap_login_endpoint vertion:' + self.LOGINEP_VERSION + '\n'

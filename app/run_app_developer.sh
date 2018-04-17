@@ -27,6 +27,10 @@ export LOGINEP_KONG_ADMINAPI_URL=http://kong:8001
 export LOGINEP_SYNCACL=group1,group2,group3
 export LOGINEP_JWT_TOKEN_TIMEOUT=60
 
+if [[ $# -eq 1 ]]; then
+  export LOGINEP_PORT=${1}
+fi
+
 python3 ./src/app.py
 
 exit 0

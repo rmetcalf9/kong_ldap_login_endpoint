@@ -35,7 +35,7 @@ class appObj():
 
     #appObj.flaskAppObject.config['SERVER_NAME'] = 'servername:123'
     try:
-      self.flaskAppObject.run(host='0.0.0.0', port=80, debug=False)
+      self.flaskAppObject.run(host='0.0.0.0', port=self.globalParamObject.LOGINEP_PORT, debug=False)
     except self.ServerTerminationError as e:
       print("Stopped")
 
