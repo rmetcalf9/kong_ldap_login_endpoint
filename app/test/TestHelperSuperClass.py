@@ -2,6 +2,7 @@ import unittest
 from appObj import appObj
 
 env = {
+  'LOGINEP_MODE': 'DEVELOPER',
   'LOGINEP_VERSION': 'TestRun',
   'LOGINEP_LDAP_TIMEOUT': '60',
   'LOGINEP_LDAP_HOST': 'unixldap.somehost.com',

@@ -2,6 +2,7 @@
 
 #Hardcoded here
 
+export LOGINEP_MODE=DOCKER
 export LOGINEP_VERSION=
 if [ -f ${APP_DIR}/../VERSION ]; then
   LOGINEP_VERSION=$(cat ${APP_DIR}/../VERSION)

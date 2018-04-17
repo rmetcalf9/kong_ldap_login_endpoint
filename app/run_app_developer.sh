@@ -14,6 +14,7 @@ if [ E${LOGINEP_VERSION} = 'E' ]; then
   exit 1
 fi
 
+export LOGINEP_MODE=DEVELOPER
 export LOGINEP_LDAP_TIMEOUT=60
 export LOGINEP_LDAP_HOST=unixldap.somehost.com
 export LOGINEP_LDAP_PORT=123

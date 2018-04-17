@@ -12,6 +12,7 @@ class InvalidEnvVarParamaterExecption(Exception):
     super(InvalidEnvVarParamaterExecption, self).__init__(message)
 
 class GlobalParamatersClass():
+  LOGINEP_MODE = None
   LOGINEP_VERSION = None
   LOGINEP_LDAP_TIMEOUT = None
   LOGINEP_LDAP_HOST = None
@@ -45,6 +46,7 @@ class GlobalParamatersClass():
       return defaultValue
 
   def __init__(self, env):
+    self.LOGINEP_MODE = self.readFromEnviroment(env, 'LOGINEP_MODE', None, ['DEVELOPER','DOCKER'])
     self.LOGINEP_VERSION = self.readFromEnviroment(env, 'LOGINEP_VERSION', None, None)
     self.LOGINEP_LDAP_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_LDAP_TIMEOUT', None, None)
     self.LOGINEP_LDAP_HOST = self.readFromEnviroment(env, 'LOGINEP_LDAP_HOST', None, None)
@@ -66,6 +68,7 @@ class GlobalParamatersClass():
 
   def getStartupOutput(self):
     r = 'Starting kong_ldap_login_endpoint vertion:' + self.LOGINEP_VERSION + '\n'
+    r += 'LOGINEP_MODE:' + self.LOGINEP_MODE + '\n'
     r += 'LOGINEP_LDAP_TIMEOUT:' + self.LOGINEP_LDAP_TIMEOUT + '\n'
     r += 'LOGINEP_LDAP_HOST:' + self.LOGINEP_LDAP_HOST + '\n'
     r += 'LOGINEP_LDAP_PORT:' + self.LOGINEP_LDAP_PORT + '\n'
@@ -79,3 +82,6 @@ class GlobalParamatersClass():
     r += 'LOGINEP_SYNCACL:' + self.LOGINEP_SYNCACL + '\n'
     r += 'LOGINEP_JWT_TOKEN_TIMEOUT:' + self.LOGINEP_JWT_TOKEN_TIMEOUT + '\n'
     return r
+
+  def getDeveloperMode(self):
+    return (self.LOGINEP_MODE == 'DEVELOPER')
