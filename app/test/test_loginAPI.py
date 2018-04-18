@@ -1,9 +1,10 @@
 from TestHelperSuperClass import testHelperAPIClient, envWithNoGroups
-from base64 import b64encode
+from base64 import b64encode, b64decode
 from unittest.mock import patch
 import ldap
 import json
 from appObj import appObj
+import jwt
 
 
 from requests._internal_utils import to_native_string
@@ -99,5 +100,10 @@ class test_loginAPI(testHelperAPIClient):
     result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
     self.assertEqual(result.status_code, 200)
     resultJSON = json.loads(result.get_data(as_text=True))
-    print(resultJSON['JWTToken'])
+    #print(resultJSON['JWTToken'])
+    #print(resultJSON['TokenExpiry'])
     self.assertNotEqual(resultJSON['JWTToken'],'')
+    decoded = jwt.decode(resultJSON['JWTToken'], b64decode("some_secretxx"), algorithms=['HS256'])
+    self.assertEqual(decoded['iss'],"some_key")
+    self.assertEqual(decoded['groups'],[])
+    self.assertEqual(decoded['username'],"TestUser")
