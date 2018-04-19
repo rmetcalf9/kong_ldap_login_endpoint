@@ -70,12 +70,12 @@ class kongAdminAPIWrapperClass():
         self.addacl(username,acl)
 
   def getJWTToken(self, username):
-    r = self.c_get('/consumers/' + username + '/jwt/' + self.jwtTokenKey, [200, 404])
+    r = self.c_get('/consumers/' + username + '/jwt/' + username + '_' + self.jwtTokenKey, [200, 404])
     if r.status_code == 200:
       resultJSON = json.loads(r.text)
       return resultJSON
     # jwt credential dosen't exist - create if
-    msgData = { 'key': self.jwtTokenKey }
+    msgData = { 'key': username + '_' + self.jwtTokenKey }
     r = self.c_post('/consumers/' + username + '/jwt/',msgData, [201])
     resultJSON = json.loads(r.text)
     return resultJSON
