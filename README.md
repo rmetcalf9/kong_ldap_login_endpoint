@@ -34,18 +34,20 @@ TODO
 
 Paramaters are read as enviroment variables
 
-LOGINEP_LDAP_TIMEOUT - Seconds to wait for LDAP connection timeout
-LOGINEP_LDAP_HOST
-LOGINEP_LDAP_PORT
-LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX    - ldap_
-LOGINEP_USER_BASE_DN
-LOGINEP_USER_ATTRIBUTE
-LOGINEP_GROUP_BASE_DN=ou=Group,ou=everyone,dc=somehost,dc=com
-LOGINEP_GROUP_ATTRIBUTE=cn
-LOGINEP_GROUP_MEMBER_FIELD=memberUid
-LOGINEP_KONG_ADMINAPI_URL  - http://kong:8001
-LOGINEP_SYNCACL               - gorup1,group2,group3
-LOGINEP_JWT_TOKEN_TIMEOUT   - seconds login is valid for
+ | Enviroment Variable Name | Example Value | Meaning |
+ | ------------------------ | ------------- | ------- |
+ | LOGINEP_LDAP_TIMEOUT | 60 | Seconds to wait for LDAP connection timeout |
+ | LOGINEP_LDAP_HOST | unixldap.somehost.com | Host of LDAP Server |
+ | LOGINEP_LDAP_PORT | 123 | Posrt of LDAP Server |
+ | LOGINEP_LDAP_CONSUMERCLIENTID_PREFIX | ldap_ | Prefix to add to ldap username when creating kong consumer |
+ | LOGINEP_USER_BASE_DN | ou=People,ou=everyone,dc=somehost,dc=com | Base DN for LDAP search query used when finding a user |
+ | LOGINEP_USER_ATTRIBUTE | uid | User identfying attribute for search query used when finding a user |
+ | LOGINEP_GROUP_BASE_DN | ou=Group,ou=everyone,dc=somehost,dc=com | Base DN for LDAP search query used when finding a group |
+ | LOGINEP_GROUP_ATTRIBUTE | cn | Group identfying attribute for search query used when finding a group |
+ | LOGINEP_GROUP_MEMBER_FIELD | memberUid | Group member identifier which matches the username |
+ | LOGINEP_KONG_ADMINAPI_URL | http://kong:8001 | Location of kong admin api endpoint |
+ | LOGINEP_SYNCACL | gorup1,group2,group3 | comma seperated list of groups to query in LDAP. If a consumer has these groups they are added to their acl |
+ | LOGINEP_JWT_TOKEN_TIMEOUT | 120 | Seconds produced JWT token is valid for. Once it is expired users will have to get another one. |
 
 ## Deployment
 
