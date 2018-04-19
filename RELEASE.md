@@ -1,5 +1,11 @@
 # Release Log
 
+## 0.0.10 - Bugfix
+
+Only one user can log in at a time. This fixes that
+See [milestone](../../milestone/2)
+
+
 ## 0.0.9 - Initial version
 
 Bugfix
