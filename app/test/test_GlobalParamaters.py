@@ -1,5 +1,5 @@
 from TestHelperSuperClass import testHelperSuperClass
-from GlobalParamaters import GlobalParamatersClass, getInvalidEnvVarPAramaterException
+from GlobalParamaters import GlobalParamatersClass, getInvalidEnvVarParamaterException
 
 class testHelperSuperClass(testHelperSuperClass):
   def test_badParams(self):
@@ -12,10 +12,11 @@ class testHelperSuperClass(testHelperSuperClass):
     }
     with self.assertRaises(Exception) as context:
       gp = GlobalParamatersClass(env)
-    self.checkGotRightException(context,getInvalidEnvVarPAramaterException('LOGINEP_VERSION'))
+    self.checkGotRightException(context,getInvalidEnvVarParamaterException('LOGINEP_MODE'))
 
   def test_goodParams(self):
     env = {
+      'LOGINEP_MODE': 'DEVELOPER',
       'LOGINEP_VERSION': 'TestRun',
       'LOGINEP_LDAP_TIMEOUT': '60',
       'LOGINEP_LDAP_HOST': 'unixldap.somehost.com',
@@ -34,6 +35,7 @@ class testHelperSuperClass(testHelperSuperClass):
 
   def test_emptyParamsNotExcepted(self):
     env = {
+      'LOGINEP_MODE': 'DEVELOPER',
       'LOGINEP_VERSION': 'TestRun',
       'LOGINEP_LDAP_TIMEOUT': '60',
       'LOGINEP_LDAP_HOST': 'unixldap.somehost.com',
@@ -50,4 +52,4 @@ class testHelperSuperClass(testHelperSuperClass):
     }
     with self.assertRaises(Exception) as context:
       gp = GlobalParamatersClass(env)
-    self.checkGotRightException(context,getInvalidEnvVarPAramaterException('LOGINEP_USER_ATTRIBUTE'))
+    self.checkGotRightException(context,getInvalidEnvVarParamaterException('LOGINEP_USER_ATTRIBUTE'))

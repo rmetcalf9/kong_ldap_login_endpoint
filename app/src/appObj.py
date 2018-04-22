@@ -27,6 +27,16 @@ class appObj():
     signal.signal(signal.SIGINT, self.exit_gracefully)
     signal.signal(signal.SIGTERM, self.exit_gracefully) #sigterm is sent by docker stop command
 
+    #Development code required to add CORS allowance in developer mode
+    @self.flaskAppObject.after_request
+    def after_request(response):
+      if (self.globalParamObject.getDeveloperMode()):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+      return response
+
+      
   # called by app.py to run the application
   def run(self):
     if (self.isInitOnce == False):
@@ -35,7 +45,7 @@ class appObj():
 
     #appObj.flaskAppObject.config['SERVER_NAME'] = 'servername:123'
     try:
-      self.flaskAppObject.run(host='0.0.0.0', port=80, debug=False)
+      self.flaskAppObject.run(host='0.0.0.0', port=self.globalParamObject.LOGINEP_PORT, debug=False)
     except self.ServerTerminationError as e:
       print("Stopped")
 

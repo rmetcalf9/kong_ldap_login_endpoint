@@ -1,7 +1,7 @@
 
 
 exceptions = dict()
-def getInvalidEnvVarPAramaterException(envVarName):
+def getInvalidEnvVarParamaterException(envVarName):
   if envVarName not in exceptions:
     exceptions[envVarName] = InvalidEnvVarParamaterExecption(envVarName)
   return exceptions[envVarName]
@@ -12,6 +12,7 @@ class InvalidEnvVarParamaterExecption(Exception):
     super(InvalidEnvVarParamaterExecption, self).__init__(message)
 
 class GlobalParamatersClass():
+  LOGINEP_MODE = None
   LOGINEP_VERSION = None
   LOGINEP_LDAP_TIMEOUT = None
   LOGINEP_LDAP_HOST = None
@@ -25,24 +26,27 @@ class GlobalParamatersClass():
   LOGINEP_KONG_ADMINAPI_URL = None
   LOGINEP_SYNCACL = None
   LOGINEP_JWT_TOKEN_TIMEOUT = None
+  LOGINEP_PORT = None
 
 
   #Read environment variable or raise an exception if it is missing and there is no default
-  def readFromEnviroment(self, env, envVarName, defaultValue, acceptableValues):
+  def readFromEnviroment(self, env, envVarName, defaultValue, acceptableValues, nullValueAllowed=False):
     try:
       val = env[envVarName]
       if (acceptableValues != None):
         if (val not in acceptableValues):
-          raise getInvalidEnvVarPAramaterException(envVarName)
-      if val == '':
-        raise getInvalidEnvVarPAramaterException(envVarName)
+          raise getInvalidEnvVarParamaterException(envVarName)
+      if not nullValueAllowed:
+        if val == '':
+          raise getInvalidEnvVarParamaterException(envVarName)
       return val
     except KeyError:
       if (defaultValue == None):
-        raise getInvalidEnvVarPAramaterException(envVarName)
+        raise getInvalidEnvVarParamaterException(envVarName)
       return defaultValue
 
   def __init__(self, env):
+    self.LOGINEP_MODE = self.readFromEnviroment(env, 'LOGINEP_MODE', None, ['DEVELOPER','DOCKER'])
     self.LOGINEP_VERSION = self.readFromEnviroment(env, 'LOGINEP_VERSION', None, None)
     self.LOGINEP_LDAP_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_LDAP_TIMEOUT', None, None)
     self.LOGINEP_LDAP_HOST = self.readFromEnviroment(env, 'LOGINEP_LDAP_HOST', None, None)
@@ -53,12 +57,18 @@ class GlobalParamatersClass():
     self.LOGINEP_GROUP_BASE_DN = self.readFromEnviroment(env, 'LOGINEP_GROUP_BASE_DN', None, None)
     self.LOGINEP_GROUP_ATTRIBUTE = self.readFromEnviroment(env, 'LOGINEP_GROUP_ATTRIBUTE', None, None)
     self.LOGINEP_GROUP_MEMBER_FIELD = self.readFromEnviroment(env, 'LOGINEP_GROUP_MEMBER_FIELD', None, None)
-    self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None)
-    self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None)
+    self.LOGINEP_KONG_ADMINAPI_URL = self.readFromEnviroment(env, 'LOGINEP_KONG_ADMINAPI_URL', None, None, nullValueAllowed=True)
+    self.LOGINEP_SYNCACL = self.readFromEnviroment(env, 'LOGINEP_SYNCACL', None, None, nullValueAllowed=True)
     self.LOGINEP_JWT_TOKEN_TIMEOUT = self.readFromEnviroment(env, 'LOGINEP_JWT_TOKEN_TIMEOUT', None, None)
+    LOGINEP_PORTSTR = self.readFromEnviroment(env, 'LOGINEP_PORT', '80', None)
+    try:
+      self.LOGINEP_PORT = int(LOGINEP_PORTSTR)
+    except:
+      raise Exception('LOGINEP_PORT must be an integer')
 
   def getStartupOutput(self):
     r = 'Starting kong_ldap_login_endpoint vertion:' + self.LOGINEP_VERSION + '\n'
+    r += 'LOGINEP_MODE:' + self.LOGINEP_MODE + '\n'
     r += 'LOGINEP_LDAP_TIMEOUT:' + self.LOGINEP_LDAP_TIMEOUT + '\n'
     r += 'LOGINEP_LDAP_HOST:' + self.LOGINEP_LDAP_HOST + '\n'
     r += 'LOGINEP_LDAP_PORT:' + self.LOGINEP_LDAP_PORT + '\n'
@@ -72,3 +82,6 @@ class GlobalParamatersClass():
     r += 'LOGINEP_SYNCACL:' + self.LOGINEP_SYNCACL + '\n'
     r += 'LOGINEP_JWT_TOKEN_TIMEOUT:' + self.LOGINEP_JWT_TOKEN_TIMEOUT + '\n'
     return r
+
+  def getDeveloperMode(self):
+    return (self.LOGINEP_MODE == 'DEVELOPER')

@@ -59,8 +59,13 @@ class ldapClass():
     except ldap.INVALID_CREDENTIALS:
       return self.falseReturn
 
-    # User is authed. Now go through all whitelisted groups and verify which they are members of
     groups = []
+    if self.appObj.globalParamObject.LOGINEP_SYNCACL is None:
+      return { 'Authed': True, 'Groups': groups}
+    if self.appObj.globalParamObject.LOGINEP_SYNCACL == '':
+      return { 'Authed': True, 'Groups': groups}
+
+    # User is authed. Now go through all whitelisted groups and verify which they are members of
     for curGroup in self.appObj.globalParamObject.LOGINEP_SYNCACL.split(','):
       curGroup = curGroup.strip()
       try:

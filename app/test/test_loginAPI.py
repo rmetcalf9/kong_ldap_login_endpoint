@@ -1,8 +1,11 @@
-from TestHelperSuperClass import testHelperAPIClient
-from base64 import b64encode
-from unittest.mock import patch
+from TestHelperSuperClass import testHelperAPIClient, envWithNoGroups
+from base64 import b64encode, b64decode
+from unittest.mock import patch, call
 import ldap
 import json
+from appObj import appObj
+import jwt
+
 
 from requests._internal_utils import to_native_string
 def _basic_auth_str(prefix, username, password):
@@ -80,3 +83,70 @@ class test_loginAPI(testHelperAPIClient):
     resultJSON = json.loads(result.get_data(as_text=True))
     print(resultJSON['JWTToken'])
     self.assertNotEqual(resultJSON['JWTToken'],'')
+
+  @patch('ldap.ldapobject.SimpleLDAPObject.simple_bind_s', return_value=None)
+  @patch('requests.get', side_effect=[
+    okrequestresp(text='{"id": "123"}'), #get consumer
+    okrequestresp(text='{"data": []}'),  #get consumer acl list
+    okrequestresp(text='{"key": "some_key", "secret": "some_secretxx"}')   #get consumer jwt token
+  ])
+  def test_loginGoodConsumerNoGroupsPresent(self, mockLdapSimpleBind, mockKongGet):
+    appObj.init(envWithNoGroups, testingMode = True)
+    self.testClient = appObj.flaskAppObject.test_client()
+    self.testClient.testing = True 
+
+    username = 'TestUser'
+    password = 'TestPassword'
+    result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
+    self.assertEqual(result.status_code, 200)
+    resultJSON = json.loads(result.get_data(as_text=True))
+    #print(resultJSON['JWTToken'])
+    #print(resultJSON['TokenExpiry'])
+    self.assertNotEqual(resultJSON['JWTToken'],'')
+    decoded = jwt.decode(resultJSON['JWTToken'], b64decode("some_secretxx"), algorithms=['HS256'])
+    self.assertEqual(decoded['iss'],"some_key")
+    self.assertEqual(decoded['groups'],[])
+    self.assertEqual(decoded['username'],username)
+
+  @patch('ldap.ldapobject.SimpleLDAPObject.simple_bind_s', return_value=None)
+  @patch('requests.get', side_effect=[
+    okrequestresp(text='{"id": "123"}'), #get consumer
+    okrequestresp(text='{"data": []}'),  #get consumer acl list
+    okrequestresp(text='{"key": "some_key", "secret": "some_secretxx"}'),   #get consumer jwt token
+    okrequestresp(text='{"id": "123"}'), #get consumer
+    okrequestresp(text='{"data": []}'),  #get consumer acl list
+    okrequestresp(text='{"key": "some_key", "secret": "some_secretxx"}')   #get consumer jwt token
+  ])
+  def test_loginTwoConsumersLoginNoGroupsPresent(self, mockKongGet, mockLdapSimpleBind):
+    appObj.init(envWithNoGroups, testingMode = True)
+    self.testClient = appObj.flaskAppObject.test_client()
+    self.testClient.testing = True 
+
+    username = 'TestUser001'
+    password = 'TestPassword'
+    result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
+    self.assertEqual(result.status_code, 200)
+    resultJSON = json.loads(result.get_data(as_text=True))
+    #print(resultJSON['JWTToken'])
+    #print(resultJSON['TokenExpiry'])
+    self.assertNotEqual(resultJSON['JWTToken'],'')
+    decoded = jwt.decode(resultJSON['JWTToken'], b64decode("some_secretxx"), algorithms=['HS256'])
+    self.assertEqual(decoded['iss'],"some_key")
+    self.assertEqual(decoded['groups'],[])
+    self.assertEqual(decoded['username'],username)
+
+    #Now log in as a second user
+    username2 = 'TestUser002'
+    password2 = 'TestPassword'
+    result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username2, password2)})
+    self.assertEqual(result.status_code, 200)
+
+    get_expected_calls = [
+      call('http://kong:8001/consumers/ldap_TestUser001'),
+      call('http://kong:8001/consumers/ldap_TestUser001/acls'),
+      call('http://kong:8001/consumers/ldap_TestUser001/jwt/ldap_TestUser001_kong_ldap_login_endpoint_jwtkey'),
+      call('http://kong:8001/consumers/ldap_TestUser002'),
+      call('http://kong:8001/consumers/ldap_TestUser002/acls'),
+      call('http://kong:8001/consumers/ldap_TestUser002/jwt/ldap_TestUser002_kong_ldap_login_endpoint_jwtkey')
+    ]
+    mockKongGet.assert_has_calls(get_expected_calls)

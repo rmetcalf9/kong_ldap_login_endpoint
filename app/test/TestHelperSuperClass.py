@@ -2,6 +2,7 @@ import unittest
 from appObj import appObj
 
 env = {
+  'LOGINEP_MODE': 'DEVELOPER',
   'LOGINEP_VERSION': 'TestRun',
   'LOGINEP_LDAP_TIMEOUT': '60',
   'LOGINEP_LDAP_HOST': 'unixldap.somehost.com',
@@ -16,6 +17,8 @@ env = {
   'LOGINEP_SYNCACL': 'group1,group2,group3',
   'LOGINEP_JWT_TOKEN_TIMEOUT': '60'
 }
+envWithNoGroups = dict(env)
+envWithNoGroups['LOGINEP_SYNCACL'] = ''
 
 class testHelperSuperClass(unittest.TestCase):
   def checkGotRightException(self, context, ExpectedException):
