@@ -13,7 +13,7 @@ I considered adding a group query and group whitelist option to the Kong LDAP pl
 
 ## Usage
 
-TODO
+I use this container as part of other container deployments. One example of it's usage is [in my dockJob container](https://github.com/rmetcalf9/dockJob/blob/master/composeExamples/docker-compose-https-ldap-jwt-auth.yml).
 
 ## Process on recieving a request
 
