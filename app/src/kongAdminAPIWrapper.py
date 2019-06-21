@@ -24,7 +24,7 @@ class kongAdminAPIWrapperClass():
     if r.status_code in expected_responses:
       return r
   def c_post(self,api, msgData,expected_responses):
-    r = requests.put(self.appObj.globalParamObject.LOGINEP_KONG_ADMINAPI_URL + api, data=json.dumps(msgData), headers={'content-type': 'application/json'})
+    r = requests.post(self.appObj.globalParamObject.LOGINEP_KONG_ADMINAPI_URL + api, data=json.dumps(msgData), headers={'content-type': 'application/json'})
     if r.status_code in expected_responses:
       return r
     raise Exception('Unexpected response from post:' + api + ' (' + str(r.status_code) + ')')
@@ -37,22 +37,38 @@ class kongAdminAPIWrapperClass():
     resultJSON = json.loads(r.text)
     return (True, resultJSON['id'])
   def createConsumer(self,username):
-    msgData = { 'username': username }
-    r = self.c_put('/consumers/',msgData, [201])
+    r = self.c_put('/consumers/' + username, {}, [200, 201])
     resultJSON = json.loads(r.text)
     return resultJSON['id']
+
   def getACLListForConsumer(self,username):
-    r = self.c_get('/consumers/' + username + '/acls', [200])
-    resultJSON = json.loads(r.text)
-    grps = []
-    for grp in resultJSON['data']:
-      grps.append(grp['group'])
+    grps = self.fetchGroups('/consumers/' + username + '/acls', [])
     return grps
+
+  def fetchGroups(self, url, groups):
+    r = self.c_get(url, [200])
+    resultJSON = json.loads(r.text)
+
+    mergedlist = []
+    mergedlist.extend(groups)
+    mergedlist.extend(self.addGroups(resultJSON['data']))
+
+    if resultJSON['next']:
+      mergedlist = self.fetchGroups(resultJSON['next'], mergedlist)
+
+    return mergedlist
+
+  def addGroups(self, groups):
+    grps = []
+    for grp in range(len(groups)):
+      grps.append(groups[grp]["group"])
+    return grps
+
   def removeacl(self,username,acl):
     r = self.c_delete('/consumers/' + username + '/acls/' + acl, [204])
   def addacl(self,username,acl):
     msgData = { 'group': acl }
-    r = self.c_put('/consumers/' + username + '/acls',msgData, [200])
+    r = self.c_post('/consumers/' + username + '/acls',msgData, [200, 201])
   
   def ensureUserExistsWithACL(self,username, aclList):
     conExists, consumerID = self.consumerExists(username)
