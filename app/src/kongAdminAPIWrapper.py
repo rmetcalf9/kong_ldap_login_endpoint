@@ -53,8 +53,9 @@ class kongAdminAPIWrapperClass():
     mergedlist.extend(groups)
     mergedlist.extend(self.addGroups(resultJSON['data']))
 
-    if resultJSON['next']:
-      mergedlist = self.fetchGroups(resultJSON['next'], mergedlist)
+    if 'next' in resultJSON:
+      if resultJSON['next']:
+        mergedlist = self.fetchGroups(resultJSON['next'], mergedlist)
 
     return mergedlist
 
@@ -69,7 +70,7 @@ class kongAdminAPIWrapperClass():
   def addacl(self,username,acl):
     msgData = { 'group': acl }
     r = self.c_post('/consumers/' + username + '/acls',msgData, [200, 201])
-  
+
   def ensureUserExistsWithACL(self,username, aclList):
     conExists, consumerID = self.consumerExists(username)
     if not conExists:

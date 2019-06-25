@@ -93,7 +93,7 @@ class test_loginAPI(testHelperAPIClient):
   def test_loginGoodConsumerNoGroupsPresent(self, mockLdapSimpleBind, mockKongGet):
     appObj.init(envWithNoGroups, testingMode = True)
     self.testClient = appObj.flaskAppObject.test_client()
-    self.testClient.testing = True 
+    self.testClient.testing = True
 
     username = 'TestUser'
     password = 'TestPassword'
@@ -120,12 +120,12 @@ class test_loginAPI(testHelperAPIClient):
   def test_loginTwoConsumersLoginNoGroupsPresent(self, mockKongGet, mockLdapSimpleBind):
     appObj.init(envWithNoGroups, testingMode = True)
     self.testClient = appObj.flaskAppObject.test_client()
-    self.testClient.testing = True 
+    self.testClient.testing = True
 
     username = 'TestUser001'
     password = 'TestPassword'
     result = self.testClient.get('/login/',headers={'Authorization': _basic_auth_str('Basic ', username, password)})
-    self.assertEqual(result.status_code, 200)
+    self.assertEqual(result.status_code, 200, msg="Login returned wrong value - " + result.get_data(as_text=True))
     resultJSON = json.loads(result.get_data(as_text=True))
     #print(resultJSON['JWTToken'])
     #print(resultJSON['TokenExpiry'])
